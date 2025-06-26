@@ -1,0 +1,3 @@
+include telomerehunter/*.R
+include telomerehunter/*.txt
+include telomerehunter/run_plot.sh

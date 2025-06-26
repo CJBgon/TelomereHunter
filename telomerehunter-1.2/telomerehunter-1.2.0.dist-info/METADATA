@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: telomerehunter
+Version: 1.2.0
+Summary: Estimation of Telomere Content from WGS Data
+Home-page: https://www.dkfz.de/en/applied-bioinformatics/telomerehunter/telomerehunter.html
+Author: Lars Feuerbach <l.feuerbach@dkfz-heidelberg.de>, Philip Ginsbach, Lina Sieverling <l.sieverling@dkfz-heidelberg.de>
+Author-email: l.sieverling@dkfz-heidelberg.de
+License: GPL
+Keywords: telomere content read NGS WGS tumor control
+Platform: UNKNOWN
+Requires-Dist: PyPDF2
+Requires-Dist: numpy
+Requires-Dist: pysam
+
+TelomereHunter extracts, sorts and analyses telomeric reads from WGS Data. It is designed to take BAM files from a tumor and/or a control sample as input. The tool was developed at the German Cancer Research Center (DKFZ).
+
+
