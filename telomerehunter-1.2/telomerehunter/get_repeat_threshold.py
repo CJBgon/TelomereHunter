@@ -34,37 +34,41 @@ import pysam
 # get all read lengths occurring in BAM file (first 1000 reads)
 # (without secondary or supplementary alignments)
 # ----------------------------------------------------------------
-def get_read_lengths(bam_file, reads_to_parse=1000):
+def get_read_lengths(bam_file, reads_to_parse=1000, input_reference_fasta=None):
 
-    # open input bam_file for reading
-    bamfile = pysam.Samfile( bam_file, "rb" )
+    # determine file type
+    if bam_file.endswith(".bam"):
+        bamfile = pysam.Samfile(bam_file, "rb")
+    elif bam_file.endswith(".cram"):
+        if input_reference_fasta is None:
+            raise ValueError("A reference FASTA file must be provided for CRAM input.")
+        bamfile = pysam.Samfile(bam_file, "rc", reference_filename=input_reference_fasta)
+    else:
+        raise ValueError("Input file must be .bam or .cram")
 
-    # print unique read lengths of the first N non-supplementary or secondary alignments
-    cntr=0
-    read_lengths=[]
+    cntr = 0
+    read_lengths = []
 
     for read in bamfile.fetch(until_eof=True):   
 
-        if read.is_secondary:        #skips all secondary alignments
+        if read.is_secondary:
             continue
 
-        if read.flag >= 2048:        # skip supplementary alignments
+        if read.flag >= 2048:
             continue
 
         read_lengths.append(len(read.seq))
 
-        cntr+=1
-        if cntr == reads_to_parse:    
+        cntr += 1
+        if cntr == reads_to_parse:
             break
-  
-    read_lengths = sorted(list(set(read_lengths)))
 
+    bamfile.close()
+
+    read_lengths = sorted(list(set(read_lengths)))
     read_lengths_str = ",".join(str(i) for i in read_lengths)
 
     return read_lengths_str
-
-
-
 
 
 def get_repeat_threshold(read_lengths_str, repeat_threshold_per_100_bp):
